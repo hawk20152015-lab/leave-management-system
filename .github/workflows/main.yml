@@ -13,107 +13,28 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.9'
     
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
         pip install buildozer cython kivy
-    
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          git \
-          python3-dev \
-          python3-pip \
-          openjdk-11-jdk \
-          android-sdk \
-          android-ndk \
-          autoconf \
-          automake \
-          pkg-config \
-          libncurses5-dev \
-          libncursesw5-dev \
-          libtool \
-          unzip \
-          zlib1g-dev \
-          lib32z1-dev \
-          libssl-dev
-    
-    - name: Setup Android SDK
-      run: |
-        mkdir -p ~/android-sdk/cmdline-tools
-        cd ~/android-sdk/cmdline-tools
-        wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
-        unzip commandlinetools-linux-10406996_latest.zip
-        mv cmdline-tools latest
-        export ANDROID_SDK_ROOT=~/android-sdk
-        export PATH=$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH
-        yes | sdkmanager --licenses
-        sdkmanager "platforms;android-31"
-        sdkmanager "build-tools;31.0.0"
-        sdkmanager "ndk;25.0.8775105"
-    
-    - name: Set environment variables
-      run: |
-        echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-        echo "ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/25.0.8775105" >> $GITHUB_ENV
-        echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
     
     - name: Build APK
       run: |
         cd leave_management_app_complete
         buildozer -u android debug
-      continue-on-error: true
     
-    - name: Upload APK as artifact
-      if: success()
-      uses: actions/upload-artifact@v3
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
       with:
         name: leave-management-apk
-        path: |
-          leave_management_app_complete/bin/*.apk
-          leave_management_app_complete/bin/*.aab
+        path: leave_management_app_complete/bin/*.apk
         retention-days: 30
-    
-    - name: Create Release
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: |
-          تطبيق إدارة الإجازات والدوام
-          
-          ✨ المميزات:
-          - إدارة الموظفين الكاملة
-          - نظام الإجازات
-          - نظام البدلاء
-          - واجهة ويب وموبايل
-          
-          📥 التحميل:
-          - leavemgmt-*-debug.apk
-          
-          شكراً للاستخدام! 🙏
-        draft: false
-        prerelease: false
-    
-    - name: Upload to Release
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
-      with:
-        files: leave_management_app_complete/bin/*.apk
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Build status notification
       if: always()
