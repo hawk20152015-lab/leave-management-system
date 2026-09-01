@@ -1,0 +1,40 @@
+═══════════════════════════════════════════════════════════════════
+⚡ خطوات GitHub السريعة (10 دقائق فقط)
+═══════════════════════════════════════════════════════════════════
+
+1️⃣ حساب GitHub
+───────────────
+https://github.com/signup
+
+2️⃣ تثبيت Git
+─────────────
+https://git-scm.com
+
+3️⃣ Repository جديد
+────────────────────
+• اضغط "+" → "New repository"
+• الاسم: leave-management-system
+• Public
+• Add .gitignore: Python
+• Add license: MIT
+• Create
+
+4️⃣ PowerShell (في مجلد المشروع)
+─────────────────────────────────
+
+git config --global user.name "اسمك"
+git config --global user.email "بريدك@gmail.com"
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/USERNAME/leave-management-system.git
+git push -u origin main
+
+✅ انتهى!
+
+═══════════════════════════════════════════════════════════════════
+
+مشاكل؟ شوف GITHUB_STEPS.md للتفاصيل الكاملة
+
+═══════════════════════════════════════════════════════════════════

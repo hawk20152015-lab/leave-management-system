@@ -1,0 +1,7 @@
+kivy==2.3.0
+kivymd==1.1.1
+flask==2.3.0
+werkzeug==2.3.0
+buildozer==1.4.1
+cython==0.29.32
+sqlite3
